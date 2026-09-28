@@ -1,4 +1,6 @@
-# T.R.A.V.I.S. — Open-Source AI Chief of Staff Blueprint
+# Task Routing and Automated Virtual Intelligence System
+
+T.R.A.V.I.S. Open-Source AI Chief of Staff Blueprint
 
 **Task Routing and Automated Virtual Intelligence System**
 
