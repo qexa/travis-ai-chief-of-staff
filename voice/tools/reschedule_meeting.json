@@ -1,0 +1,40 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "reschedule_meeting",
+    "description": "Move the caller's existing meeting to a new time from check_availability.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "type": "string"
+        },
+        "new_start": {
+          "type": "string",
+          "description": "Exact ISO start value from check_availability"
+        }
+      },
+      "required": [
+        "event_id",
+        "new_start"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  },
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Updating that now.",
+      "blocking": false
+    },
+    {
+      "type": "request-response-delayed",
+      "content": "Still with you, one more moment.",
+      "timingMilliseconds": 3000
+    }
+  ]
+}

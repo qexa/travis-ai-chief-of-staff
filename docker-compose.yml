@@ -1,0 +1,14 @@
+# One worker on purpose: the in-process briefing scheduler and per-call state assume a single process.
+# To scale out, set TRAVIS_SCHEDULER=false, trigger /briefing/run from cron, and move CALL_STATE to Redis.
+services:
+  travis:
+    build: .
+    env_file: .env
+    ports: ["8000:8000"]
+    volumes:
+      - travis-data:/data
+      - ./config:/app/config:ro
+      - ./knowledge:/app/knowledge:ro
+    restart: unless-stopped
+volumes:
+  travis-data:

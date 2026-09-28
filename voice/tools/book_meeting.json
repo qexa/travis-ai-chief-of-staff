@@ -1,0 +1,61 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "book_meeting",
+    "description": "Book a meeting at a start time returned by check_availability.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "description": "Exact ISO start value from check_availability"
+        },
+        "meeting_type": {
+          "type": "string",
+          "enum": [
+            "intro",
+            "standard",
+            "investor"
+          ]
+        },
+        "attendee_name": {
+          "type": "string"
+        },
+        "attendee_email": {
+          "type": "string"
+        },
+        "attendee_phone": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Short meeting topic"
+        }
+      },
+      "required": [
+        "start",
+        "attendee_name"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  },
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Booking that now.",
+      "blocking": false
+    },
+    {
+      "type": "request-response-delayed",
+      "content": "Still with you, one more moment.",
+      "timingMilliseconds": 3000
+    }
+  ]
+}

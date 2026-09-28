@@ -1,0 +1,12 @@
+.env
+*.db
+*.db-journal
+.vapi-state.json
+__pycache__/
+.pytest_cache/
+.venv/
+config/*.yaml
+!config/executive.example.yaml
+knowledge/*/
+!knowledge/example/
+!knowledge/templates/

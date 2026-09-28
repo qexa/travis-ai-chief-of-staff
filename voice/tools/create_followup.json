@@ -1,0 +1,34 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "create_followup",
+    "description": "Create a follow-up task with an owner and due date so nothing slips.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string",
+          "description": "'exec' or a team member key/name"
+        },
+        "due_date": {
+          "type": "string",
+          "description": "YYYY-MM-DD"
+        },
+        "related_contact": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

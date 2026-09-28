@@ -1,0 +1,23 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "search_knowledge",
+    "description": "Search the company knowledge base to answer a caller's question about the company.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

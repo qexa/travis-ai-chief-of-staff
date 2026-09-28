@@ -1,0 +1,27 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "note_about_caller",
+    "description": "Quietly remember one useful fact about this caller for next time.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "fact": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Who the fact is about (defaults to the caller)"
+        }
+      },
+      "required": [
+        "fact"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "take_message",
+    "description": "Save a complete message for the executive or a team member.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caller_name": {
+          "type": "string"
+        },
+        "callback_number": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "normal",
+            "high",
+            "critical"
+          ]
+        },
+        "best_time_to_call": {
+          "type": "string"
+        },
+        "for_whom": {
+          "type": "string",
+          "description": "'exec' or a team member key/name (from route_call message_for)"
+        }
+      },
+      "required": [
+        "caller_name",
+        "reason"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

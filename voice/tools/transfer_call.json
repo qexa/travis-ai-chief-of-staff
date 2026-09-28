@@ -1,0 +1,12 @@
+{
+  "type": "transferCall",
+  "function": {
+    "name": "transfer_call",
+    "description": "Transfer the live call. Only use after route_call returned transfer_exec or transfer_team."
+  },
+  "destinations": [],
+  "_comment": "Empty destinations: Vapi asks the server via a transfer-destination-request, and Travis Core returns the number chosen by route_call. The number never enters the model's context.",
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook"
+  }
+}

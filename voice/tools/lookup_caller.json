@@ -1,0 +1,37 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "lookup_caller",
+    "description": "Identify the caller from caller ID and return their tier, name and handling notes. Call this FIRST on every call.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name the caller gave, if any"
+        },
+        "company": {
+          "type": "string"
+        }
+      },
+      "required": []
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  },
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "One moment.",
+      "blocking": false
+    },
+    {
+      "type": "request-response-delayed",
+      "content": "Still with you, one more moment.",
+      "timingMilliseconds": 3000
+    }
+  ]
+}

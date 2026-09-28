@@ -1,0 +1,36 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "find_my_meeting",
+    "description": "Find the caller's upcoming meeting(s) with the executive, matched by caller ID, name or email.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": []
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  },
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Let me pull that up.",
+      "blocking": false
+    },
+    {
+      "type": "request-response-delayed",
+      "content": "Still with you, one more moment.",
+      "timingMilliseconds": 3000
+    }
+  ]
+}

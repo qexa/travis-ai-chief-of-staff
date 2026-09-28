@@ -1,0 +1,7 @@
+{
+  "type": "endCall",
+  "function": {
+    "name": "end_call",
+    "description": "End the call after a warm goodbye, or immediately for spam."
+  }
+}

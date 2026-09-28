@@ -1,0 +1,17 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "get_executive_status",
+    "description": "Caller-safe description of whether the executive is available right now, and when they are free.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

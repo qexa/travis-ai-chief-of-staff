@@ -1,0 +1,41 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "route_call",
+    "description": "Decide how to handle this call once you know who is calling and why. Returns an action to follow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caller_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string",
+          "description": "One sentence: why they are calling"
+        },
+        "urgency": {
+          "type": "string",
+          "enum": [
+            "low",
+            "normal",
+            "high",
+            "critical"
+          ],
+          "description": "Your judgment. critical = safety, legal, or money at immediate risk. high = time-sensitive today."
+        }
+      },
+      "required": [
+        "reason",
+        "urgency"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

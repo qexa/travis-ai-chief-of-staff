@@ -1,0 +1,58 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "check_availability",
+    "description": "Find open meeting times on the executive's calendar. Always call before offering times.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "meeting_type": {
+          "type": "string",
+          "enum": [
+            "intro",
+            "standard",
+            "investor"
+          ]
+        },
+        "duration_minutes": {
+          "type": "integer"
+        },
+        "earliest_date": {
+          "type": "string",
+          "description": "YYYY-MM-DD"
+        },
+        "latest_date": {
+          "type": "string",
+          "description": "YYYY-MM-DD"
+        },
+        "part_of_day": {
+          "type": "string",
+          "enum": [
+            "any",
+            "morning",
+            "afternoon",
+            "evening"
+          ]
+        }
+      },
+      "required": []
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  },
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Let me check the calendar.",
+      "blocking": false
+    },
+    {
+      "type": "request-response-delayed",
+      "content": "Still with you, one more moment.",
+      "timingMilliseconds": 3000
+    }
+  ]
+}

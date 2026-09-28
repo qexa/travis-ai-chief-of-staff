@@ -1,0 +1,33 @@
+{
+  "type": "function",
+  "async": false,
+  "function": {
+    "name": "text_caller_info",
+    "description": "Text the caller one pre-approved piece of information.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "type": "string",
+          "enum": [
+            "vendor_inbox",
+            "office_address",
+            "video_link",
+            "website"
+          ]
+        },
+        "phone": {
+          "type": "string",
+          "description": "Only if different from caller ID"
+        }
+      },
+      "required": [
+        "info"
+      ]
+    }
+  },
+  "server": {
+    "url": "{{PUBLIC_BASE_URL}}/vapi/webhook",
+    "timeoutSeconds": 15
+  }
+}

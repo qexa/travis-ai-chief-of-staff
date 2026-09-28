@@ -1,0 +1,235 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# TRAVIS executive profile  (one file per executive / client)
+#
+# This file is the single source of truth for WHO TRAVIS serves and the RULES
+# he follows. The system prompt teaches judgment; this file holds the facts.
+# Change a rule here and TRAVIS behaves differently on the next call, with no
+# prompt edits and no redeploy of the voice assistant.
+#
+# Everything below is FICTIONAL demo data (Jordan Hale / Northline Logistics).
+# ─────────────────────────────────────────────────────────────────────────────
+
+executive:
+  name: Jordan Hale
+  first_name: Jordan
+  title: Chief Executive Officer
+  company: Northline Logistics Group
+  pronoun: he                     # he | she | they  (used in "He's in a meeting")
+  honorific: sir                  # how TRAVIS addresses the exec: sir | ma'am | Jordan | Mr. Hale
+  caller_facing_name: Mr. Hale    # how TRAVIS refers to the exec when talking to callers
+  timezone: America/Chicago
+  mobile: "+16155550100"          # transfers + exec command channel (NEVER disclosed to callers)
+  email: jordan@northline.example
+  command_numbers:                # numbers allowed to text TRAVIS commands
+    - "+16155550100"
+  command_pin: "4417"             # required for destructive commands (cancel, delete, share)
+
+# The human team TRAVIS works alongside. TRAVIS routes work to them; he never replaces them.
+team:
+  - key: ea
+    name: Dana Whitfield
+    role: Executive Assistant
+    phone: "+16155550111"
+    email: dana@northline.example
+    handles: [expense, travel booking, gifts, general admin, backup for urgent]
+  - key: cfo_office
+    name: Marcus Reed
+    role: CFO
+    phone: "+16155550122"
+    email: marcus@northline.example
+    handles: [invoice, billing, payment, accounts payable, audit]
+  - key: comms
+    name: Lena Ortiz
+    role: Head of Communications
+    phone: "+16155550133"
+    email: lena@northline.example
+    handles: [press, media, reporter, interview request, podcast]
+  - key: facilities
+    name: Ray Coleman
+    role: Facilities Manager
+    phone: "+16155550144"
+    email: ray@northline.example
+    handles: [building, office, alarm, leak, power outage, parking]
+
+# ── TRAVIS persona ──────────────────────────────────────────────────────────
+travis:
+  name: TRAVIS
+  company_line: "Mr. Hale's office"
+    # {part_of_day} and {recording_notice} are filled per call.
+  greeting_business_hours: "Good {part_of_day}, you've reached Jordan Hale's office. This is TRAVIS. {recording_notice} How can I help you?"
+  greeting_after_hours: "Good {part_of_day}, Jordan Hale's office, this is TRAVIS. {recording_notice} How can I help you?"
+  disclose_ai_when_asked: true    # ALWAYS true. TRAVIS never claims to be human.
+  proactive_ai_disclosure: false  # set true where law or client policy requires stating it up front
+  recording_notice: "This call may be recorded so nothing gets missed."   # "" to disable
+  languages: [en, es]
+
+# ── Working hours (drives "after hours" behavior, not TRAVIS availability) ──
+hours:
+  business_days: [mon, tue, wed, thu, fri]
+  start: "08:00"
+  end: "18:00"
+
+# ── Caller tiers and what each tier is allowed to do ────────────────────────
+# Order matters: first match wins in lookup (vip list → contacts → heuristics).
+tiers:
+  vip:
+    description: Board, investors, top clients, key partners
+    can_interrupt_meetings: false   # only if urgency is high/critical
+    transfer_when_available: true
+    can_book_directly: true
+    booking_scope: extended         # extended = may use early/late overflow windows
+    alert_exec_by_sms: true
+  inner_circle:
+    description: Family and personal circle
+    can_interrupt_meetings: true
+    transfer_when_available: true
+    can_book_directly: false
+    alert_exec_by_sms: true
+  known:
+    description: Existing contacts, clients, colleagues
+    can_interrupt_meetings: false
+    transfer_when_available: false
+    can_book_directly: true
+    booking_scope: standard
+    alert_exec_by_sms: false
+  new_opportunity:
+    description: Unknown caller with a plausible business reason (referral, prospect, partner)
+    can_interrupt_meetings: false
+    transfer_when_available: false
+    can_book_directly: true
+    booking_scope: intro_only       # 15-minute intro slots only
+    alert_exec_by_sms: false
+  vendor:
+    description: Unsolicited sales pitches, recruiters, surveys
+    can_interrupt_meetings: false
+    transfer_when_available: false
+    can_book_directly: false
+    alert_exec_by_sms: false
+  spam:
+    description: Robocalls, known spam numbers, scams
+    can_interrupt_meetings: false
+    transfer_when_available: false
+    can_book_directly: false
+    alert_exec_by_sms: false
+
+# ── VIP list (TRAVIS greets these by name) ──────────────────────────────────
+vips:
+  - name: Catherine Blake
+    phone: "+16155550200"
+    company: Harbor Point Ventures
+    tier: vip
+    relationship: Lead investor, board member
+    notes: Prefers to be called Cate. Always wants the next available time, not options.
+  - name: David Okafor
+    phone: "+16155550201"
+    company: Okafor Freight Partners
+    tier: vip
+    relationship: Largest customer (28% of revenue)
+    notes: Renewal due Q1. Route any contract questions straight through if Jordan is free.
+  - name: Emily Hale
+    phone: "+16155550202"
+    company: ""
+    tier: inner_circle
+    relationship: Wife
+    notes: Always put through, except during no-interrupt meetings (see calendar.no_interrupt_keywords).
+  - name: Sam Hale
+    phone: "+16155550203"
+    company: ""
+    tier: inner_circle
+    relationship: Son (college)
+    notes: ""
+
+# ── Urgency ─────────────────────────────────────────────────────────────────
+urgency:
+  # Words that push urgency up. The model also judges urgency from context;
+  # the server takes the HIGHER of the two.
+  critical_keywords: [emergency, fire, flood, injured, injury, hospital, police, break-in, accident, lawsuit served, data breach, ransomware, outage]
+  high_keywords: [urgent, asap, time sensitive, deadline today, term sheet, closing, board, wire, contract expires]
+  # Who may escalate a critical matter straight to the exec:
+  critical_from_anyone: true      # a building emergency from an unknown caller still gets through
+  # Where urgent matters go when the exec doesn't pick up / is unavailable:
+  urgent_backup: ea
+
+# ── Topic routing to the human team ─────────────────────────────────────────
+# If the caller's reason matches a team member's `handles` list, TRAVIS offers
+# that person (message or transfer) instead of the executive.
+topic_routing:
+  enabled: true
+  transfer_to_team_during_business_hours: true
+
+# ── Calendar protection rules ───────────────────────────────────────────────
+calendar:
+  backend_calendar_id: primary
+  earliest_meeting: "08:30"
+  latest_meeting_end: "17:30"
+  extended_earliest: "07:30"      # VIP overflow window
+  extended_latest_end: "18:30"
+  buffer_minutes: 15              # kept free before and after every meeting
+  max_meetings_per_day: 6
+  min_notice_hours: 2
+  booking_horizon_days: 14
+  slot_step_minutes: 15
+  no_meeting_days: []             # e.g. [fri]
+  protected_blocks:               # never offered to callers
+    - label: Deep work
+      days: [tue, thu]
+      start: "08:30"
+      end: "10:30"
+    - label: Lunch
+      days: [mon, tue, wed, thu, fri]
+      start: "12:00"
+      end: "13:00"
+  meeting_types:
+    intro: { minutes: 15, video: true }
+    standard: { minutes: 30, video: true }
+    investor: { minutes: 45, video: false }
+  # What callers may do to existing meetings without the exec approving:
+  # While the current meeting's title contains one of these, only CRITICAL matters interrupt,
+  # even for inner-circle callers (they get an SMS alert + callback instead).
+  no_interrupt_keywords: [board meeting, keynote, on stage, earnings call, deposition]
+  caller_can_reschedule: true     # only their own meeting, only into an open valid slot
+  caller_can_cancel: false        # cancellation is taken as a message
+  default_video_link: "https://meet.example.com/jordan-hale"
+
+# ── Information TRAVIS never discloses to callers ───────────────────────────
+confidential:
+  - The executive's personal cell number, home address, or exact location
+  - Travel details beyond "traveling today" (no cities, flights, hotels)
+  - Names of other people on the calendar or what meetings are about
+  - Family details
+  - Deal terms, financials, or anything marked confidential in the knowledge base
+  # TRAVIS can say: "He's in a meeting until 3" / "He's traveling today" / "He's unavailable this afternoon"
+
+# ── Morning briefing ────────────────────────────────────────────────────────
+briefing:
+  enabled: true
+  send_at: "06:45"
+  days: [mon, tue, wed, thu, fri, sat]
+  channels: [sms, email]
+  overnight_window_start: "18:00"  # "overnight" = since this time yesterday
+  include:
+    - schedule
+    - actions_taken
+    - calls_overnight
+    - needs_reply
+    - followups_due
+    - spam_blocked
+
+# ── Approved texts TRAVIS may send a caller (text_caller_info tool) ─────────
+caller_texts:
+  vendor_inbox: "Please send details to vendors@northline.example and include your company name and a short summary. It will be reviewed."
+  office_address: "Northline Logistics Group, 400 Commerce St, Suite 900, Nashville, TN 37219."
+  video_link: "Video link for your meeting: https://meet.example.com/jordan-hale"
+  website: "https://northline.example"
+
+# ── Reminders to external attendees ─────────────────────────────────────────
+reminders:
+  enabled: true
+  send_at: "18:00"                # the evening before
+  text: "Reminder: you're meeting with {exec_ref} tomorrow, {when}. Reply here if anything changes."
+
+# ── Summaries after every call ──────────────────────────────────────────────
+call_summaries:
+  sms_for_priority: [critical, high]     # texted immediately
+  email_digest_for: [normal, low]        # rolled into the briefing / hourly email
+  skip_for_tiers: [spam]
